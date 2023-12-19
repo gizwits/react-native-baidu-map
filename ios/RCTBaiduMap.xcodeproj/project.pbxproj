@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E0138932897C9A900C977A5 /* PoiSearchModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E0138922897C9A900C977A5 /* PoiSearchModule.m */; };
+		2E0138962897C9C300C977A5 /* PoiSugSearchModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E0138952897C9C300C977A5 /* PoiSugSearchModule.m */; };
 		EF04BD302364B7050007BADF /* BaiduMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF04BD2F2364B7050007BADF /* BaiduMapManager.m */; };
 		EF154DCC1D562193003146DF /* BaiduMapViewManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = EF6660E71D55E68000DB8D08 /* BaiduMapViewManager.h */; };
 		EF18EAA0246F07A6005A2F4D /* BMKPointAnnotationPro.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18EA9E246F07A6005A2F4D /* BMKPointAnnotationPro.m */; };
@@ -58,6 +60,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2E0138912897C9A900C977A5 /* PoiSearchModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PoiSearchModule.h; sourceTree = "<group>"; };
+		2E0138922897C9A900C977A5 /* PoiSearchModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PoiSearchModule.m; sourceTree = "<group>"; };
+		2E0138942897C9C300C977A5 /* PoiSugSearchModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PoiSugSearchModule.h; sourceTree = "<group>"; };
+		2E0138952897C9C300C977A5 /* PoiSugSearchModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PoiSugSearchModule.m; sourceTree = "<group>"; };
 		EF04BD2E2364B7050007BADF /* BaiduMapManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaiduMapManager.h; sourceTree = "<group>"; };
 		EF04BD2F2364B7050007BADF /* BaiduMapManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaiduMapManager.m; sourceTree = "<group>"; };
 		EF18EA9E246F07A6005A2F4D /* BMKPointAnnotationPro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMKPointAnnotationPro.m; sourceTree = "<group>"; };
@@ -163,15 +169,7 @@
 		EF3C22581CC2C30D0099E9B6 /* RCTBaiduMap */ = {
 			isa = PBXGroup;
 			children = (
-				EF18EB3B246FE899005A2F4D /* BaseModule.h */,
-				EF18EB3A246FE899005A2F4D /* BaseModule.m */,
-				EF18EB39246FE898005A2F4D /* GetDistanceModule.h */,
-				EF18EB38246FE898005A2F4D /* GetDistanceModule.m */,
-				EF18EA9F246F07A6005A2F4D /* BMKPointAnnotationPro.h */,
-				EF18EA9E246F07A6005A2F4D /* BMKPointAnnotationPro.m */,
 				EF7F66BB2369EB3000D1D9DC /* Modules */,
-				EFB77A63234B0B3B00A17DDF /* ClusterAnnotation.h */,
-				EFB77A64234B0B3B00A17DDF /* ClusterAnnotation.m */,
 				EFB77A54234AF70200A17DDF /* Utils */,
 				EFB77A4D234AF6B200A17DDF /* ViewManagers */,
 				EFB77A43234AF64200A17DDF /* Views */,
@@ -180,8 +178,6 @@
 				EF3C225B1CC2C30D0099E9B6 /* BaiduMapView.m */,
 				EF6660E71D55E68000DB8D08 /* BaiduMapViewManager.h */,
 				EF6660E81D55E69B00DB8D08 /* BaiduMapViewManager.m */,
-				EF4ABB0B1DC378BD008E75C9 /* GeolocationModule.h */,
-				EF4ABB0C1DC378CF008E75C9 /* GeolocationModule.m */,
 			);
 			path = RCTBaiduMap;
 			sourceTree = "<group>";
@@ -189,10 +185,20 @@
 		EF7F66BB2369EB3000D1D9DC /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				EF18EB3B246FE899005A2F4D /* BaseModule.h */,
+				EF18EB3A246FE899005A2F4D /* BaseModule.m */,
+				EF18EB39246FE898005A2F4D /* GetDistanceModule.h */,
+				EF18EB38246FE898005A2F4D /* GetDistanceModule.m */,
+				EF4ABB0B1DC378BD008E75C9 /* GeolocationModule.h */,
+				EF4ABB0C1DC378CF008E75C9 /* GeolocationModule.m */,
 				EF7F66C22369F9B600D1D9DC /* BaiduMapAppModule.h */,
 				EF7F66C32369F9B600D1D9DC /* BaiduMapAppModule.m */,
 				EF04BD2E2364B7050007BADF /* BaiduMapManager.h */,
 				EF04BD2F2364B7050007BADF /* BaiduMapManager.m */,
+				2E0138912897C9A900C977A5 /* PoiSearchModule.h */,
+				2E0138922897C9A900C977A5 /* PoiSearchModule.m */,
+				2E0138942897C9C300C977A5 /* PoiSugSearchModule.h */,
+				2E0138952897C9C300C977A5 /* PoiSugSearchModule.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -213,6 +219,10 @@
 		EFB77A43234AF64200A17DDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EFB77A63234B0B3B00A17DDF /* ClusterAnnotation.h */,
+				EFB77A64234B0B3B00A17DDF /* ClusterAnnotation.m */,
+				EF18EA9F246F07A6005A2F4D /* BMKPointAnnotationPro.h */,
+				EF18EA9E246F07A6005A2F4D /* BMKPointAnnotationPro.m */,
 				EFB77A67234B792F00A17DDF /* OverlayCluster.h */,
 				EFB77A66234B792F00A17DDF /* OverlayCluster.m */,
 				EFB77A69234B792F00A17DDF /* OverlayClusterManager.h */,
@@ -377,10 +387,12 @@
 				EF9F1D802478DECC007FB307 /* OverlayHeatMapManager.m in Sources */,
 				EF18EB3C246FE899005A2F4D /* GetDistanceModule.m in Sources */,
 				EFB77A53234AF6E300A17DDF /* OverlayMarkerManager.m in Sources */,
+				2E0138962897C9C300C977A5 /* PoiSugSearchModule.m in Sources */,
 				EF18EAEB246FB87A005A2F4D /* OverlayCircle.m in Sources */,
 				EFB77A52234AF6E300A17DDF /* OverlayPolylineManager.m in Sources */,
 				EF18EB2B246FE383005A2F4D /* OverlayPolygonManager.m in Sources */,
 				EFB77A4A234AF69B00A17DDF /* OverlayPolyline.m in Sources */,
+				2E0138932897C9A900C977A5 /* PoiSearchModule.m in Sources */,
 				EF9F1D7D24783377007FB307 /* OverlayHeatMap.m in Sources */,
 				EF4ABB0D1DC378CF008E75C9 /* GeolocationModule.m in Sources */,
 				EFB77A4C234AF69B00A17DDF /* OverlayMarker.m in Sources */,

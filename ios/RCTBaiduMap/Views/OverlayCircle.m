@@ -43,9 +43,13 @@
 - (BOOL)ownOverlay:(id<BMKOverlay>)overlay {
     if ([overlay isKindOfClass:[BMKCircle class]]) {
         BMKCircle *source = (BMKCircle *) overlay;
-        return source.radius == _overlay.radius
-            && source.coordinate.latitude == _overlay.coordinate.latitude
-            && source.coordinate.longitude == _overlay.coordinate.longitude;
+        NSLog(@"srource:%@ %@ %@", @(source.radius), @(source.coordinate.latitude), @(source.coordinate.longitude));
+        NSLog(@"overlay:%@ %@ %@", @(_overlay.radius), @(_overlay.coordinate.latitude), @(_overlay.coordinate.longitude));
+
+        BOOL result = source.radius == _overlay.radius
+        && source.coordinate.latitude == _overlay.coordinate.latitude
+        && source.coordinate.longitude == _overlay.coordinate.longitude;
+        return result;
     }
     return NO;
 }

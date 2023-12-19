@@ -93,6 +93,8 @@ declare namespace ReactNativeBaiduMap {
      */
     zoom?: number;
 
+    paddingBottom?: number;
+
     /**
      * 是否显示定位
      * @default false
@@ -113,7 +115,7 @@ declare namespace ReactNativeBaiduMap {
 
     /**
      * @default undefined
-     * @supported Android only
+     * @supported Android only iOS 区域改变结束前调用
      */
     onMapStatusChangeStart?: Function;
 
@@ -124,7 +126,7 @@ declare namespace ReactNativeBaiduMap {
 
     /**
      * @default undefined
-     * @supported Android only
+     * @supported Android only iOS 区域改变结束时调用
      */
     onMapStatusChangeFinish?: Function;
 
@@ -392,6 +394,21 @@ declare namespace ReactNativeBaiduMap {
      * 停止持续定位
      */
     export function stopLocating(): void;
+
+    /**
+     * 设置坐标系类型
+     */
+    export function setCoordType(coordType: CoorType):void;
+
+    /**
+     * 设置坐标系类型
+     */
+    export function getCoordType():Promise<any>;
+
+    /**
+     * 转成百度坐标
+     */
+    export function  convertCoordinate(coordType: CoorType, sourceLatLng:Location):Promise<any>;
   }
 
   /**
@@ -464,6 +481,19 @@ declare namespace ReactNativeBaiduMap {
      * 是否有定位权限
      */
     export function hasLocationPermission(): Promise<boolean>;
+  }
+
+  export namespace PoiSugSearch{
+    export function requestSuggestion(keyword: string, city: string, cityLimit: boolean);
+  }
+
+  export namespace PoiSearch{
+    export function searchInCity(city: string, keyword: string, pageIndex: number, pageSize:number, cityLimit: boolean, scope: number);
+    export function searchNearby(keyword: string, latLng: Location, radius: number, pageIndex: number, pageSize:number, cityLimit: boolean, scope: number);
+  }
+
+  export namespace RoutePlanSearch{
+    export function drivingSearch(from: Location, to: Location);
   }
 }
 

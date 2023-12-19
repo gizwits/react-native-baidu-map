@@ -107,6 +107,7 @@ static NSMutableDictionary *ICON_MAGE_MAP;
         CGRect frame = CGRectMake(0, 0, _icon.size.width, _icon.size.height);
         if (_imageView == nil) {
             _imageView = [[UIImageView alloc] initWithImage:image];
+            _imageView.userInteractionEnabled = YES;
             [annotation.annotationView addSubview:_imageView];
         }
         _imageView.frame = frame;

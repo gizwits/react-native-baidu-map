@@ -9,6 +9,12 @@
 #import "BaiduMapViewManager.h"
 #import "BMKPointAnnotationPro.h"
 
+@interface BaiduMapViewManager(){
+    BaiduMapView * _baiduMapView;
+}
+
+@end
+
 @implementation BaiduMapViewManager;
 
 static NSString *markerIdentifier = @"markerIdentifier";
@@ -29,11 +35,30 @@ RCT_EXPORT_VIEW_PROPERTY(markers, NSArray*)
 RCT_EXPORT_VIEW_PROPERTY(locationData, NSDictionary*)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 
+RCT_EXPORT_METHOD(clearMemoryCache:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self->_baiduMapView) {
+            self->_baiduMapView.delegate = nil;
+            self->_baiduMapView.mapType = BMKMapTypeStandard;
+            self->_baiduMapView.showsUserLocation = NO;
+            [self->_baiduMapView.layer removeAllAnimations];
+            [self->_baiduMapView removeAnnotations:self->_baiduMapView.annotations];
+            [self->_baiduMapView removeOverlays:self->_baiduMapView.overlays];
+            [self->_baiduMapView removeFromSuperview];
+//            self->_baiduMapView = nil;
+        }
+        resolve(NULL);
+    });
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(center, CLLocationCoordinate2D, BaiduMapView) {
     [view setCenterCoordinate:json ? [RCTConvert CLLocationCoordinate2D:json] : defaultView.centerCoordinate];
 }
 
 + (void)initSDK:(NSString*)key {
+    [BMKMapManager setAgreePrivacy:YES];
+    [[BMKLocationAuth sharedInstance] setAgreePrivacy:YES];
     BMKMapManager* _mapManager = [[BMKMapManager alloc]init];
     [[BMKLocationAuth sharedInstance] checkPermisionWithKey:key authDelegate:nil];
     BOOL ret = [_mapManager start:key  generalDelegate:nil];
@@ -41,11 +66,15 @@ RCT_CUSTOM_VIEW_PROPERTY(center, CLLocationCoordinate2D, BaiduMapView) {
         NSLog(@"manager start failed!");
     }
 }
-
 - (UIView *)view {
-    BaiduMapView* mapView = [[BaiduMapView alloc] init];
-    mapView.delegate = self;
-    return mapView;
+    
+    if(!_baiduMapView) {
+        _baiduMapView = [BaiduMapView new];
+
+    }
+    _baiduMapView.delegate = self;
+    
+    return _baiduMapView;
 }
 
 - (void)mapview:(BMKMapView *)mapView onDoubleClick:(CLLocationCoordinate2D)coordinate {
@@ -73,13 +102,50 @@ RCT_CUSTOM_VIEW_PROPERTY(center, CLLocationCoordinate2D, BaiduMapView) {
 }
 
 - (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
+    CLLocationCoordinate2D targetGeoPt = [mapView getMapStatus].targetGeoPt;
+    BMKCoordinateRegion region = mapView.region;
     NSDictionary* event = @{
                             @"type": @"onMapLoaded",
-                            @"params": @{}
-                            };
+                            @"params": @{
+                                            @"target": @{
+                                                    @"latitude": @(targetGeoPt.latitude),
+                                                    @"longitude": @(targetGeoPt.longitude)
+                                                    },
+                                            @"latitudeDelta": @(region.span.latitudeDelta),
+                                            @"longitudeDelta": @(region.span.longitudeDelta),
+                                            @"zoom": @(mapView.zoomLevel),
+                                            @"overlook": @""
+                                         }
+    };
     [self sendEvent:mapView params:event];
 }
-
+- (void)mapView:(BMKMapView *) mapView clickAnnotationView:(nonnull BMKAnnotationView *)view {
+    NSString *title = [[view annotation] title];
+    if (title == nil) {
+        title = @"";
+    }
+    NSDictionary* event = @{
+                            @"type": @"onMarkerClick",
+                            @"params": @{
+                                    @"title": title,
+                                    @"position": @{
+                                            @"latitude": @([[view annotation] coordinate].latitude),
+                                            @"longitude": @([[view annotation] coordinate].longitude)
+                                            }
+                                    }
+                            };
+    if ([mapView isKindOfClass:[BaiduMapView class]]) {
+        BaiduMapView *baiduMapView = (BaiduMapView *) mapView;
+        OverlayMarker *overlayMaker = [baiduMapView findOverlayMaker:[view annotation]];
+        if (overlayMaker != nil) {
+            overlayMaker.onClick(event);
+            NSLog(@"OverlayMarker found");
+        } else {
+            NSLog(@"OverlayMarker not found");
+        }
+    }
+    [self sendEvent:mapView params:event];
+}
 - (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view {
     NSString *title = [[view annotation] title];
     if (title == nil) {
@@ -120,6 +186,49 @@ RCT_CUSTOM_VIEW_PROPERTY(center, CLLocationCoordinate2D, BaiduMapView) {
                                     }
                             };
     [self sendEvent:mapView params:event];
+}
+
+- (void)mapView:(BMKMapView *)mapView regionWillChangeAnimated:(BOOL)animated reason:(BMKRegionChangeReason)reason {
+    NSLog(@"regionWillChangeAnimated:%@", @(reason));
+    CLLocationCoordinate2D targetGeoPt = [mapView getMapStatus].targetGeoPt;
+    BMKCoordinateRegion region = mapView.region;
+    NSDictionary* event = @{
+        @"type":@"onMapStatusChangeStart",
+        @"params":@{
+            @"target": @{
+                    @"latitude": @(targetGeoPt.latitude),
+                    @"longitude": @(targetGeoPt.longitude)
+                    },
+            @"latitudeDelta": @(region.span.latitudeDelta),
+            @"longitudeDelta": @(region.span.longitudeDelta),
+            @"zoom": @(mapView.zoomLevel),
+            @"overlook": @""
+         }
+    };
+    [self sendEvent:mapView params:event];
+}
+
+- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated reason:(BMKRegionChangeReason)reason {
+    NSLog(@"regionDidChangeAnimated: %@", @(reason));
+    CLLocationCoordinate2D targetGeoPt = [mapView getMapStatus].targetGeoPt;
+    BMKCoordinateRegion region = mapView.region;
+    NSDictionary* event = @{
+        @"type":@"onMapStatusChangeFinish",
+        @"params":@{
+            @"target": @{
+                    @"latitude": @(targetGeoPt.latitude),
+                    @"longitude": @(targetGeoPt.longitude)
+                    },
+            @"latitudeDelta": @(region.span.latitudeDelta),
+            @"longitudeDelta": @(region.span.longitudeDelta),
+            @"zoom": @(mapView.zoomLevel),
+            @"overlook": @""
+         }
+    };
+    [self sendEvent:mapView params:event];
+//    [mapView removeFromSuperview];
+//    [self.view addSubview:mapView];
+//
 }
 
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
@@ -230,6 +339,9 @@ RCT_CUSTOM_VIEW_PROPERTY(center, CLLocationCoordinate2D, BaiduMapView) {
         return;
     }
     mapView.onChange(params);
+}
+- (void)dealloc {
+    NSLog(@"mapview dealloc");
 }
 
 @end

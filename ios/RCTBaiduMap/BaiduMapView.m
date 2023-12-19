@@ -9,10 +9,12 @@
 #import "BaiduMapView.h"
 
 @implementation BaiduMapView {
-    BMKMapView* _mapView;
+//    BMKMapView* _mapView;
     BMKPointAnnotation* _annotation;
     NSMutableArray* _annotations;
     NSMutableSet* _markers;
+    NSMutableSet* _circles;
+
 }
 
 - (void)setZoom:(float)zoom {
@@ -52,12 +54,19 @@
     if (_markers == nil) {
         _markers = [[NSMutableSet alloc] init];
     }
+    if (_circles == nil) {
+        _circles = [[NSMutableSet alloc] init];
+    }
+    
     if ([subview isKindOfClass:[OverlayView class]]) {
         OverlayView *overlayView = (OverlayView *) subview;
-        [overlayView addToMap:self];
         if ([subview isKindOfClass:[OverlayMarker class]]) {
             [_markers addObject:subview];
         }
+        else if ([subview isKindOfClass:[OverlayCircle class]]) {
+            [_circles addObject:subview];
+        }
+        [overlayView addToMap:self];
     }
     [super insertReactSubview:subview atIndex:atIndex];
 }
@@ -69,6 +78,8 @@
         [overlayView removeFromMap:self];
         if ([subview isKindOfClass:[OverlayMarker class]]) {
             [_markers removeObject:subview];
+        } else if([subview isKindOfClass:[OverlayCircle class]]){
+            [_circles removeObject:subview];
         }
     }
     [super removeReactSubview:subview];
@@ -91,9 +102,13 @@
     NSLog(@"didUpdateReactSubviews:%d", [self.reactSubviews count]);
 }
 
-- (OverlayView *)findOverlayView:(id<BMKOverlay>)overlay {
-    for (int i = 0; i < [self.reactSubviews count]; i++) {
-        UIView * view = [self.reactSubviews objectAtIndex:i];
+/*
+ * 方法废弃，采用下面方面，实现和marker一样
+ **/
+- (OverlayView *)_findOverlayView:(id<BMKOverlay>)overlay {
+    NSArray* reactSuviews = self.reactSubviews;
+    for (int i = 0; i < [reactSuviews count]; i++) {
+        UIView * view = [reactSuviews objectAtIndex:i];
         if ([view isKindOfClass:[OverlayView class]]) {
             OverlayView *overlayView = (OverlayView *) view;
             if ([overlayView ownOverlay:overlay]) {
@@ -103,7 +118,17 @@
     }
     return nil;
 }
-
+- (OverlayView *)findOverlayView:(id<BMKOverlay>)overlay {
+    NSEnumerator *enumerator = [_circles objectEnumerator];
+    OverlayCircle *circle  = [enumerator nextObject];
+    while (circle != nil) {
+        if ([circle ownOverlay:overlay]) {
+            return circle;
+        }
+        circle = [enumerator nextObject];
+    }
+    return nil;
+}
 - (OverlayMarker *)findOverlayMaker:(id<BMKAnnotation>)annotation {
     NSEnumerator *enumerator = [_markers objectEnumerator];
     OverlayMarker *marker  = [enumerator nextObject];
@@ -114,6 +139,10 @@
         marker = [enumerator nextObject];
     }
     return nil;
+}
+
+- (void)dealloc {
+    NSLog(@"BaiduMapView dealloc");
 }
 
 @end

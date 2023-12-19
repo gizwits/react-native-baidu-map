@@ -110,6 +110,11 @@ public class MapViewManager extends ViewGroupManager<TextureMapView> {
         mapView.getMap().setMapStatus(mapStatusUpdate);
     }
 
+    @ReactProp(name="paddingBottom")
+    public void paddingBottom(TextureMapView mapView, int bottom) {
+        mapView.getMap().setViewPadding(0,0,0,bottom);
+    }
+
     @ReactProp(name = "showsUserLocation")
     public void setShowsUserLocation(TextureMapView mapView, boolean showsUserLocation) {
         mapView.getMap().setMyLocationEnabled(showsUserLocation);

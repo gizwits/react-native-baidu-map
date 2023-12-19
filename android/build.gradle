@@ -10,7 +10,7 @@ buildscript {
         google()
         jcenter()
         maven() {
-            url 'http://repo.lovebing.net/repository/maven-public/'
+            url 'https://maven.aliyun.com/repository/public'
         }
     }
     dependencies {
@@ -23,7 +23,7 @@ repositories {
     google()
     jcenter()
     maven {
-        url 'http://repo.lovebing.net/repository/maven-public/'
+        url 'https://maven.aliyun.com/repository/public'
     }
 }
 
@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.facebook.react:react-native:0.62.2'
+    compileOnly 'com.facebook.react:react-native:+'
     implementation files('libs/BaiduLBS_Android.jar')
     compileOnly files('src/main/assets')
 }

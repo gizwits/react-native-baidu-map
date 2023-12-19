@@ -29,6 +29,26 @@
 
 + (UIColor *)getColor:(NSString *)colorHexStr {
     CGFloat alpha, red, blue, green;
+    if ([colorHexStr containsString:@"rgb"]) {
+        colorHexStr = [colorHexStr stringByReplacingOccurrencesOfString:@"rgb" withString:@""];
+        colorHexStr = [colorHexStr stringByReplacingOccurrencesOfString:@"a" withString:@""];
+        colorHexStr = [colorHexStr stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        colorHexStr = [colorHexStr stringByReplacingOccurrencesOfString:@")" withString:@""];
+        NSArray* rgbaComps = [colorHexStr componentsSeparatedByString:@","];
+        if (rgbaComps.count >= 3) {
+            red = [rgbaComps[0] intValue]/255.0;
+            blue = [rgbaComps[2] intValue]/255.0;
+            green = [rgbaComps[1] intValue]/255.0;
+            alpha = 1.0f;
+            if (rgbaComps.count == 4) {
+                alpha = [rgbaComps[3] intValue]/255.0;
+            }
+            return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+        }
+    }
+    if ([colorHexStr containsString:@"#"]) {
+        colorHexStr = [colorHexStr stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    }
     switch ([colorHexStr length]) {
         case 6:
             alpha = 1.0f;

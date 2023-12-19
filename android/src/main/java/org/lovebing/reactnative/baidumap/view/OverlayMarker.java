@@ -104,12 +104,12 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
         init();
     }
 
-    public OverlayMarker(Context context,  AttributeSet attrs) {
+    public OverlayMarker(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public OverlayMarker(Context context,  AttributeSet attrs, int defStyleAttr) {
+    public OverlayMarker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -128,7 +128,7 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
     }
 
     @TargetApi(21)
-    public OverlayMarker(Context context,  AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public OverlayMarker(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -196,6 +196,9 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
 
     public void setTitle(String title) {
         this.title = title;
+        if (marker != null) {
+            marker.setTitle(title);
+        }
     }
 
     public void setTitleOffsetY(int titleOffsetY) {
@@ -211,6 +214,7 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
         this.position = position;
         if (marker != null) {
             marker.setPosition(position);
+            marker.setIcon(getBitmapDescriptor());
         }
     }
 
@@ -243,12 +247,12 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
         if (iconInfo.getUri() == null || iconInfo.getUri().length() == 0) {
             return;
         }
+        Log.i("download", iconInfo.getUri());
+        this.iconInfo = iconInfo;
         if (BITMAP_DESCRIPTOR_MAP.containsKey(iconInfo.getUri())) {
             iconBitmapDescriptor = BITMAP_DESCRIPTOR_MAP.get(iconInfo.getUri());
             return;
         }
-        Log.i("download", iconInfo.getUri());
-        this.iconInfo = iconInfo;
         String uri = iconInfo.getUri();
         if (uri == null) {
             iconBitmapDescriptor = null;
@@ -282,8 +286,9 @@ public class OverlayMarker extends ViewGroup implements OverlayView, ClusterItem
         if (iconInfo != null
                 && iconInfo.getWidth() > 0
                 && iconInfo.getHeight() > 0) {
+            float density = this.getContext().getResources().getDisplayMetrics().density;
             result = BitmapDescriptorFactory.fromBitmap(BitmapUtil.resizeBitmap(result.getBitmap(),
-                    iconInfo.getWidth(), iconInfo.getHeight()));
+                    (int) (iconInfo.getWidth() * density), (int) (iconInfo.getHeight() * density)));
         }
         return result;
     }

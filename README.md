@@ -1,5 +1,5 @@
 # react-native-baidu-map [![npm version](https://img.shields.io/npm/v/react-native-baidu-map.svg?style=flat)](https://www.npmjs.com/package/react-native-baidu-map)
-
+react-native v0.63.2 支持
 1.0.x 分支：react-native-baidu-map-old [![npm version](https://img.shields.io/npm/v/react-native-baidu-map-old.svg?style=flat)](https://www.npmjs.com/package/react-native-baidu-map-old)
 
 分支说明：
@@ -283,3 +283,65 @@ Cluster 示例
 ### 鸣谢
 [![jetbrains](https://raw.githubusercontent.com/lovebing/react-native-baidu-map/master/images/jetbrains.png)](https://www.jetbrains.com/?from=react-native-baidu-map)
 
+
+
+# 1.0.51
+-- 安卓百度sdk版本升级到v7.5.2
+-- 安卓增加initSDK方法，可以js中设置apiKey
+# 1.0.52
+-- 安卓增加PoiSugSearch
+requestSuggestion(keyword: string, city: string, cityLimit: boolean);
+-- 安卓增加PoiSearch
+searchInCity(city: string, keyword: string, loadIndex: number, cityLimit: boolean, scope: number);
+searchNearby(keyword: string, latLng: Location, radius: number, loadIndex: number, cityLimit: boolean, scope: number);
+# 1.0.53
+-- 安卓marker更新自定义图标
+
+#1.0.54
+-- 更新iOS   s.dependency 'BaiduMapKit', '6.5.1'
+
+-- s.dependency 'BMKLocationKit', '2.0.2'
+   iOS地图SDK隐私合规接口添加 
+
+# 1.0.55
+-- 安卓marker图标大小适应分辨率
+
+# 1.0.56
+-- 安卓 增加RoutePlanSearchModule，增加drivingSearch方法
+
+# 1.0.57
+-- 安卓 优化PoiSearch两个方法loadIndex替换为pageIndex，增加pageSize
+export namespace PoiSearch{
+export function searchInCity(city: string, keyword: string, pageIndex: number, pageSize:number, cityLimit: boolean, scope: number);
+export function searchNearby(keyword: string, latLng: Location, radius: number, pageIndex: number, pageSize:number, cityLimit: boolean, scope: number);
+}
+
+# 1.0.58
+-- MapApp
+openDrivingRoute(start, end) {
+module.openDrivingRoute(start, end);
+}
+openTransitRoute(start, end) {
+module.openTransitRoute(start, end);
+}
+openWalkNavi(start, end) {
+module.openWalkNavi(start, end);
+}
+# 1.0.59
+- 增加PoiSearch SuggestionSearch
+
+# 1.0.61
+- iOS设置circle功能优化，颜色转换方法调整
+
+# 1.0.64
+- android 增加设置坐标坐标系类型，获取坐标系类型，以及坐标转换
+
+# 1.0.65
+- iOS 增加设置坐标坐标系类型，获取坐标系类型，以及坐标转换
+- iOS 增加RoutePlanSearchModule，增加drivingSearch方法
+- iOS 增加实现 openPoiNearbySearch openPoiDetialsPage
+
+# 1.0.68
+- Geolocation 增加 setCoordType getCoordType
+# 1.0.70
+- iOS MapView 内存优化

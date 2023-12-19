@@ -6,66 +6,76 @@
  */
 
 import {
-  requireNativeComponent,
-  View
+    NativeModules, Platform,
+    requireNativeComponent,
+    View
 } from 'react-native';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import MapTypes from './MapTypes';
-import Overlay from './Overlay';
 
-export default class MapView extends Component {
-  static propTypes = {
-    ...View.propTypes,
-    zoomControlsVisible: PropTypes.bool,
-    trafficEnabled: PropTypes.bool,
-    baiduHeatMapEnabled: PropTypes.bool,
-    clusterEnabled: PropTypes.bool,
-    mapType: PropTypes.number,
-    zoom: PropTypes.number,
-    showsUserLocation: PropTypes.bool,
-    scrollGesturesEnabled: PropTypes.bool, //是否允许拖动
-    zoomGesturesEnabled: PropTypes.bool,//是否充许手势缩放
-    center: PropTypes.object,
-    locationData: PropTypes.object,
-    onMapStatusChangeStart: PropTypes.func,
-    onMapStatusChange: PropTypes.func,
-    onMapStatusChangeFinish: PropTypes.func,
-    onMapLoaded: PropTypes.func,
-    onMapClick: PropTypes.func,
-    onMapDoubleClick: PropTypes.func,
-    onMarkerClick: PropTypes.func,
-    onMapPoiClick: PropTypes.func
-  };
+const BaiduMapViewNativeModule = NativeModules.BaiduMapView;
 
-  static defaultProps = {
-    zoomControlsVisible: true,
-    trafficEnabled: false,
-    baiduHeatMapEnabled: false,
-    mapType: MapTypes.NORMAL,
-    center: null,
-    zoom: 10,
-    scrollGesturesEnabled: true,
-    zoomGesturesEnabled: true,
-    showsUserLocation: false
-  };
+class MapView extends Component {
+    static propTypes = {
+        ...View.propTypes,
+        zoomControlsVisible: PropTypes.bool,
+        trafficEnabled: PropTypes.bool,
+        baiduHeatMapEnabled: PropTypes.bool,
+        clusterEnabled: PropTypes.bool,
+        mapType: PropTypes.number,
+        zoom: PropTypes.number,
+        showsUserLocation: PropTypes.bool,
+        scrollGesturesEnabled: PropTypes.bool, //是否允许拖动
+        zoomGesturesEnabled: PropTypes.bool,//是否充许手势缩放
+        center: PropTypes.object,
+        locationData: PropTypes.object,
+        onMapStatusChangeStart: PropTypes.func,
+        onMapStatusChange: PropTypes.func,
+        onMapStatusChangeFinish: PropTypes.func,
+        onMapLoaded: PropTypes.func,
+        onMapClick: PropTypes.func,
+        onMapDoubleClick: PropTypes.func,
+        onMarkerClick: PropTypes.func,
+        onMapPoiClick: PropTypes.func
+    };
 
-  constructor() {
-    super();
-  }
+    static defaultProps = {
+        zoomControlsVisible: true,
+        trafficEnabled: false,
+        baiduHeatMapEnabled: false,
+        mapType: MapTypes.NORMAL,
+        center: null,
+        zoom: 10,
+        scrollGesturesEnabled: true,
+        zoomGesturesEnabled: true,
+        showsUserLocation: false
+    };
 
-  _onChange(event) {
-    if (typeof this.props[event.nativeEvent.type] === 'function') {
-      this.props[event.nativeEvent.type](event.nativeEvent.params);
+    constructor() {
+        super();
     }
-  }
 
-  render() {
-    return <BaiduMapView {...this.props} onChange={this._onChange.bind(this)}/>;
-  }
-  
+    _onChange(event) {
+        if (typeof this.props[event.nativeEvent.type] === 'function') {
+            this.props[event.nativeEvent.type](event.nativeEvent.params);
+        }
+    }
+
+    render() {
+        return <BaiduMapView ref={c => this._ref = c} {...this.props} onChange={this._onChange.bind(this)}/>;
+    }
+
+    componentWillUnmount(): * {
+        Platform.OS === 'ios' && MapView.clearMemoryCache().then();
+    }
+
 }
 
+MapView.clearMemoryCache = () => Platform.OS === 'ios' ? BaiduMapViewNativeModule.clearMemoryCache() : null;
+
 const BaiduMapView = requireNativeComponent('BaiduMapView', MapView, {
-  nativeOnly: {onChange: true}
+    nativeOnly: {onChange: true}
 });
+
+export default MapView;

@@ -7,6 +7,7 @@
 //
 
 #import "BaiduMapAppModule.h"
+#import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 
 @implementation BaiduMapAppModule
 
@@ -41,15 +42,33 @@ RCT_EXPORT_METHOD(openWalkNavi:(NSDictionary *)startPoint endPoint:(NSDictionary
 }
 
 RCT_EXPORT_METHOD(openPoiNearbySearch:(NSDictionary *)options) {
-    
+    @try {
+        BMKOpenPoiNearbyOption* option = [BMKOpenPoiNearbyOption new];
+        option.keyword = [options objectForKey:@"key"];
+        option.radius = [[options objectForKey:@"radius"] intValue];
+        option.location = [OverlayUtils getCoorFromOption:options];
+        [BMKOpenPoi openBaiduMapPoiNearbySearch:option];
+    } @catch (NSException *exception) {
+        NSLog(@"openPoiNearbySearch error: %@", exception.description);
+    } @finally {
+        
+    }
 }
 
 RCT_EXPORT_METHOD(openPoiDetialsPage:(NSString *)uid) {
-    
+    @try {
+        BMKOpenPoiDetailOption* option = [BMKOpenPoiDetailOption new];
+        option.poiUid = uid;
+        [BMKOpenPoi openBaiduMapPoiDetailPage:option];
+    } @catch (NSException *exception) {
+        NSLog(@"openPoiDetialsPage error: %@", exception.description);
+    } @finally {
+        
+    }
 }
 
 RCT_EXPORT_METHOD(openPanoShow:(NSString *)uid) {
-    
+    NSLog(@"百度map不存在方法 openBaiduMapPanoShow");
 }
 
 -(void)updateRouteOption:(BMKOpenRouteOption *)option startPoint:(NSDictionary *)startPoint endPoint:(NSDictionary *)endPoint {

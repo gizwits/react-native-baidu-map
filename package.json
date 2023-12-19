@@ -1,7 +1,7 @@
 {
-  "name": "react-native-baidu-map",
-  "version": "1.0.37",
-  "description": "Baidu Map SDK modules and views for React Native(Android & iOS), support react native 0.61+. 百度地图 React Native 模块，支持 react native 0.61+，已更新到最新的百度地图 SDK 版本。",
+  "name": "react-native-gizwits-baidu-map",
+  "version": "1.0.73",
+  "description": "1.0.72 修复ios poi.tags nil问题 \\n 1.0.58，更新iOS   s.dependency 'BaiduMapKit', '6.5.1'\\n  s.dependency 'BMKLocationKit', '2.0.2'，iOS地图SDK隐私合规接口添加 更新安卓maven库；\\n针对react-native EventEmitter 移除once方法修改调整Geolocation.js \\n Baidu Map SDK modules and views for React Native(Android & iOS), support react native 0.61+. 百度地图 React Native 模块，支持 react native 0.61+，已更新到最新的百度地图 SDK 版本。",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

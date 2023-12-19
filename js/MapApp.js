@@ -17,7 +17,13 @@ import React, {
 const module = NativeModules.BaiduMapAppModule;
 
 export default {
-  openBaiduMapTransitRoute(start, end) {
-    module.openBaiduMapTransitRoute(start, end);
+  openDrivingRoute(start, end) {
+    module.openDrivingRoute(start, end);
+  }
+  openTransitRoute(start, end) {
+    module.openTransitRoute(start, end);
+  }
+  openWalkNavi(start, end) {
+    module.openWalkNavi(start, end);
   }
 };

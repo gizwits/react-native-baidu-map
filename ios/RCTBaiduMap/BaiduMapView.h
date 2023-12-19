@@ -19,6 +19,7 @@
 #import "OverlayUtils.h"
 #import "OverlayPolyline.h"
 #import "OverlayMarker.h"
+#import "OverlayCircle.h"
 #import "ClusterAnnotation.h"
 
 @interface BaiduMapView : BMKMapView <BMKMapViewDelegate>
@@ -36,6 +37,7 @@
 
 - (OverlayView *)findOverlayView:(id<BMKOverlay>)overlay;
 - (OverlayMarker *)findOverlayMaker:(id<BMKAnnotation>)annotation;
+
 
 @end
 
